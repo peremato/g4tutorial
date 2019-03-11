@@ -13,6 +13,7 @@ See the [pre-requisites](#Installation-pre-requisites) depending on your host.
 
 ## Cross-mount your host volumes into the docker image
 In this way your work stays outside the image and is not lost when the image is stopped
+
     docker run -e DISPLAY=host.docker.internal:0 \
            -v $HOME:/home/g4/host \ 
            -it gitlab-registry.cern.ch/mato/g4tutorial \

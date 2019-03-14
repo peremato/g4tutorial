@@ -1,6 +1,6 @@
 # Geant4 Tutorial Container Image
 
-This project is to build an Docker image for running the exercises in Geant4 tutorials and courses. It is based in the Ubuntu LTS 18.04 image and it add all the necessary system bits and installs on top the software integrated by the LCG releases. It should be self-contained and not require any remote access for running it.
+This project is to build an Docker image for running the exercises in Geant4 tutorials and courses. It is based in the CentOS 7 image and it add all the necessary system bits and installs on top the software integrated by the LCG releases. It should be self-contained and not require any remote access for running it.
 
 See the [pre-requisites](#Installation-pre-requisites) depending on your host.
 
@@ -8,7 +8,7 @@ See the [pre-requisites](#Installation-pre-requisites) depending on your host.
 
     xhost + 127.0.0.1
     docker run -e DISPLAY=host.docker.internal:0 \
-           -it gitlab-registry.cern.ch/mato/g4tutorial \
+           -it peremato/g4tutorial-centos7 \
            bash --login
 
 ## Cross-mount your host volumes into the docker image
@@ -16,7 +16,7 @@ In this way your work stays outside the image and is not lost when the image is 
 
     docker run -e DISPLAY=host.docker.internal:0 \
            -v $HOME:/home/g4/host \ 
-           -it gitlab-registry.cern.ch/mato/g4tutorial \
+           -it peremato/g4tutorial-centos7 \
            bash --login
 
 Inside the image your host files are under $HOME/host
@@ -31,13 +31,14 @@ Inside the image your host files are under $HOME/host
 # To build and upload the image
 First log in to GitLab’s Container Registry using your GitLab username and password. 
 
-    docker login gitlab-registry.cern.ch
+    docker login 
+    <provide the dockerhub credentials>
 
 Once you log in, you’re free to create and upload a container image using the common build and push commands
 
     git clone https://gitlab.cern.ch/mato/g4tutorial.git
-    docker build -t gitlab-registry.cern.ch/mato/g4tutorial g4tutorial
-    docker push gitlab-registry.cern.ch/mato/g4tutorial
+    docker build -t peremato/g4tutorial-centos7 g4tutorial/centos7
+    docker push peremato/g4tutorial-centos7
 
 # Installation pre-requisites
 

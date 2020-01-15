@@ -23,10 +23,10 @@ RUN yum -y install \
     gdbm-devel tk-devel xz-devel
 
 # Setup LCGCMake
-RUN git clone -b ${LCG_BRANCH} https://gitlab.cern.ch/sft/lcgcmake.git $LCGCMAKE_ROOT
-RUN ln -s $LCGCMAKE_ROOT/bin/lcgcmake /usr/local/bin/lcgcmake
-RUN chmod +x /usr/local/bin/lcgcmake
-RUN echo source /opt/lcg/${LCG_VERSION}/${LCG_PLATFORM}/setup.sh > /etc/profile.d/lcg-setup.sh
+RUN git clone -b ${LCG_BRANCH} https://gitlab.cern.ch/sft/lcgcmake.git $LCGCMAKE_ROOT &&\
+    ln -s $LCGCMAKE_ROOT/bin/lcgcmake /usr/local/bin/lcgcmake &&\
+    chmod +x /usr/local/bin/lcgcmake &&\
+    echo source /opt/lcg/${LCG_VERSION}/${LCG_PLATFORM}/setup.sh > /etc/profile.d/lcg-setup.sh
 
 # Create user g4
 RUN useradd -m -G wheel g4 && echo "g4 ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -40,27 +40,27 @@ RUN chown g4:g4 /opt
 USER g4
 RUN mkdir /tmp/build
 WORKDIR /tmp/build
-RUN lcgcmake config --version ${LCG_VERSION} --compiler ${LCG_COMPILER}
-RUN lcgcmake install Geant4 CMake ninja
-RUN rm -rf /tmp/build
+RUN lcgcmake config --version ${LCG_VERSION} --compiler ${LCG_COMPILER} &&\
+    lcgcmake install Geant4 CMake ninja &&\
+    rm -rf /tmp/build
 
 # Geant4 datasets
 RUN mkdir -p /opt/lcg/Geant4/share/data
 WORKDIR /opt/lcg/Geant4/share/data
-RUN curl https://geant4-data.web.cern.ch/geant4-data/datasets/G4NDL.4.6.tar.gz | tar xz
-RUN curl https://geant4-data.web.cern.ch/geant4-data/datasets/G4EMLOW.7.9.tar.gz | tar xz
-RUN curl https://geant4-data.web.cern.ch/geant4-data/datasets/G4PhotonEvaporation.5.5.tar.gz | tar xz
-RUN curl https://geant4-data.web.cern.ch/geant4-data/datasets/G4RadioactiveDecay.5.4.tar.gz | tar xz
-RUN curl https://geant4-data.web.cern.ch/geant4-data/datasets/G4PARTICLEXS.2.1.tar.gz | tar xz
-RUN curl https://geant4-data.web.cern.ch/geant4-data/datasets/G4PII.1.3.tar.gz | tar xz
-RUN curl https://geant4-data.web.cern.ch/geant4-data/datasets/G4RealSurface.2.1.1.tar.gz | tar xz
-RUN curl https://geant4-data.web.cern.ch/geant4-data/datasets/G4SAIDDATA.2.0.tar.gz | tar xz
-RUN curl https://geant4-data.web.cern.ch/geant4-data/datasets/G4ABLA.3.1.tar.gz | tar xz
-RUN curl https://geant4-data.web.cern.ch/geant4-data/datasets/G4INCL.1.0.tar.gz | tar xz
-RUN curl https://geant4-data.web.cern.ch/geant4-data/datasets/G4ENSDFSTATE.2.2.tar.gz | tar xz
+RUN curl -s https://geant4-data.web.cern.ch/geant4-data/datasets/G4NDL.4.6.tar.gz | tar xz
+RUN curl -s https://geant4-data.web.cern.ch/geant4-data/datasets/G4EMLOW.7.9.tar.gz | tar xz
+RUN curl -s https://geant4-data.web.cern.ch/geant4-data/datasets/G4PhotonEvaporation.5.5.tar.gz | tar xz
+RUN curl -s https://geant4-data.web.cern.ch/geant4-data/datasets/G4RadioactiveDecay.5.4.tar.gz | tar xz
+RUN curl -s https://geant4-data.web.cern.ch/geant4-data/datasets/G4PARTICLEXS.2.1.tar.gz | tar xz
+RUN curl -s https://geant4-data.web.cern.ch/geant4-data/datasets/G4PII.1.3.tar.gz | tar xz
+RUN curl -s https://geant4-data.web.cern.ch/geant4-data/datasets/G4RealSurface.2.1.1.tar.gz | tar xz
+RUN curl -s https://geant4-data.web.cern.ch/geant4-data/datasets/G4SAIDDATA.2.0.tar.gz | tar xz
+RUN curl -s https://geant4-data.web.cern.ch/geant4-data/datasets/G4ABLA.3.1.tar.gz | tar xz
+RUN curl -s https://geant4-data.web.cern.ch/geant4-data/datasets/G4INCL.1.0.tar.gz | tar xz
+RUN curl -s https://geant4-data.web.cern.ch/geant4-data/datasets/G4ENSDFSTATE.2.2.tar.gz | tar xz
 RUN sed -i s:/cvmfs/geant4.cern.ch:/opt/lcg/Geant4:g /opt/lcg/${LCG_VERSION}/${LCG_PLATFORM}/bin/geant4-config
-ENV G4INSTALL=/opt/lcg/${LCG_VERSION}/${LCG_PLATFORM}
-ENV G4EXAMPLES=${G4INSTALL}/share/Geant4-10.5.0/examples
+ENV G4INSTALL=/opt/lcg/${LCG_VERSION}/${LCG_PLATFORM} \
+    G4EXAMPLES=${G4INSTALL}/share/Geant4-10.5.0/examples
 
 WORKDIR ${HOME}
 

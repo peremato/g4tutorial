@@ -5,7 +5,7 @@ MAINTAINER Pere Mato <pere.mato@cern.ch>
 ENV LCGCMAKE_ROOT=/usr/local/lcgcmake\
     ARCH=x86_64 \
     DEBIAN_FRONTEND=noninteractive\
-    LCG_VERSION=95\
+    LCG_VERSION=96b\
     LCG_PLATFORM=x86_64-ubuntu1804-gcc7-opt
 
 RUN apt-get update && \
@@ -13,10 +13,10 @@ RUN apt-get update && \
 
 # Tools necessary for installing and configuring Ubuntu
 RUN apt-get install -y \
-    python git cmake nano \
+    python git cmake nano sudo \
     g++ gcc gfortran binutils uuid-dev libssl-dev curl libdbus-1-3\
     libbz2-dev libx11-dev libxpm-dev libxft-dev libxext-dev libmotif-dev libtiff5-dev \
-    mesa-common-dev libglu1-mesa libxi-dev libxmu-dev libglu1-mesa-dev \
+    mesa-common-dev libglu1-mesa libxi-dev libxmu-dev libglu1-mesa-dev mesa-utils \
     libncurses5-dev zlib1g-dev libcurl4-openssl-dev libreadline6-dev \
     libgdbm-dev tk-dev libgl2ps-dev liblzma-dev
 
@@ -28,7 +28,7 @@ RUN echo source /opt/lcg/${LCG_VERSION}/${LCG_PLATFORM}/setup.sh > /etc/profile.
 
 
 # Create user g4
-RUN useradd -m g4
+RUN useradd -m -G sudo g4 && echo "g4 ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 ENV USER=g4
 ENV HOME=/home/g4
 RUN chown g4:g4 -R $LCGCMAKE_ROOT

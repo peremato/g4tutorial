@@ -8,7 +8,8 @@ See the [pre-requisites](#Installation-pre-requisites) depending on your host.
 
     xhost + 127.0.0.1
     docker run -e DISPLAY=host.docker.internal:0 \
-           -it peremato/g4tutorial-centos7 \
+           -e LIBGL_ALWAYS_INDIRECT=1 \
+           -it peremato/g4tutorial-centos7:latest \
            bash --login
 
 ## Cross-mount your host volumes into the docker image
@@ -22,11 +23,11 @@ In this way your work stays outside the image and is not lost when the image is 
 Inside the image your host files are under $HOME/host
 
 ## Build and run a basic example of Geant4
-    cp -r $G4EXAMPLES/basic/B1 .
+    cp -r $G4EXAMPLES/basic/B2/B2b .
     mkdir build; cd build
-    cmake ../B1
+    cmake ../B2b
     make -j4
-    ./exampleB1
+    ./exampleB2b
 
 # To build and upload the image
 First log in to GitLab’s Container Registry using your GitLab username and password. 
@@ -40,14 +41,24 @@ Once you log in, you’re free to create and upload a container image using the 
     docker build -t peremato/g4tutorial-centos7 g4tutorial/centos7
     docker push peremato/g4tutorial-centos7
 
+# Useful docker commands
+- stop all running containers  
+  `docker rm $(docker ps -a | grep -v Up | cut -d ' ' -f1)`
+- prune all unneeded images  
+  `docker image prune`
+
+
 # Installation pre-requisites
 
 ## MacOS
 You need to install the following packages:
 - Docker (see https://docs.docker.com/docker-for-mac/install/)
-- XQuatz (see https://www.xquartz.org)
+- XQuatz (see https://www.xquartz.org)  
+  In addition, to need to enable `iglx` with the following command:  
+  `defaults write org.macosforge.xquartz.X11 enable_iglx -bool true`
 
 ## Centos 7
+
 
 
 

@@ -15,7 +15,7 @@ RUN yum -y update
 
 # Tools necessary for installing and configuring Ubuntu
 RUN yum -y install \
-    python git cmake nano which make gcc binutils file sudo readline-devel bzip2-devel libcurl-devel\
+    python git cmake nano which make gcc binutils file sudo patch readline-devel bzip2-devel libcurl-devel\
     uuid-devel openssl-devel dbus \
     libX11-devel libXpm-devel libXft-devel libXext-devel motif-devel libtiff \
     libXi-devel libXmu-devel mesa-libGL-devel mesa-libGLU-devel glx-utils \

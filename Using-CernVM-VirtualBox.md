@@ -18,6 +18,7 @@ Here are the instructions on how to create a VM for VirtualBox to be able to run
     ```
   - for Windows:
      Download the [cernvm-launch](https://ecsft.cern.ch/dist/cernvm/launch/bin/Win/cernvm-launch.exe) executable.
+- On MacOS and using the ssh login interface you may need to install **XQuartz** for using the Geant4 graphics. XQuartz can be downloded from [here](https://www.xquartz.org)
 
 ## Create the VM Image
 - Clone the repository with the public CernVM contexts
@@ -43,7 +44,8 @@ You can remote login to the VM with the following command if the VM is running
 ```
 cernvm-launch ssh g4-tutorial
 ```
-user:g4user, pass:pass
+user:g4user  
+password:pass
 
 ## Using the graphical desktop of the VM
 The VM can also be used from the desktop directly with the necessary conversion of keystrokes between systems MacOS/Win to Linux
@@ -63,8 +65,9 @@ The VM can also be used from the desktop directly with the necessary conversion 
 Open a terminal (or ssh to the VM) and execute the following commands. The first time a terminal is open, CVMFS is accessed to setup a full environment, and this takes a bit of time.
 ```
     cp -r $G4EXAMPLES/basic/B1 .
+    cd B1
     mkdir build; cd build
-    cmake ../B1
+    cmake ..
     make -j4
     ./exampleB1
 ```
